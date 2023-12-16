@@ -51,7 +51,7 @@
 
  1. <h3 id="notice">회원가입</h3>
 
-![공지사항 조회](https://user-images.githubusercontent.com/77372352/111657655-fd188000-884e-11eb-80ce-e4704c17f81c.gif)
+![회원가입](https://github.com/seo02wow/Okitchen/assets/135966211/6d9a03e7-867e-4717-81fb-bad66a0cc229)
 
   **회원가입 페이지**
    
