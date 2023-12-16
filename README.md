@@ -9,15 +9,15 @@
 
 * 일정 : 2023년 11월 07일 ~ 2023년 11월 29일
 
-* 개발 목적 : 1인 가구의 정보를 공유하고 소통할 수 있는 커뮤니티 사이트 제작
+* 개발 목적 : 식품 쇼핑몰 밀 판매자가 상품을 등록, 관리자가 누적된 데이터를 활용할 수 있는 사이트 제작
 
 * 개발 환경
   - O/S : Windows 10
   - Server : Apache-tomcat-8.5.61
   - Java EE IDE : Eclipse ( version 2020-06 (4.16.0) )
-  - Database : Oracle SQL Developer ( version 20.2.0 )
+  - Database : Oracle SQL Developer ( version 18.3.0 )
   - Programming Language : JAVA, HTML, CSS, JavaScript, JSP, SQL
-  - Framework/flatform : Spring, mybatis, jQuery 3.5.1, Bootstrap v4.6.x
+  - Framework/flatform : Spring, mybatis, jQuery 3.7.1, Bootstrap v5.3.1x
   - API : Kakao map, summernote
 
 
@@ -47,3 +47,24 @@
 ------------
 
 # 📝구현 기능
+
+## 회원가입
+
+ 1. <h3 id="notice">회원가입</h3>
+
+![공지사항 조회](https://user-images.githubusercontent.com/77372352/111657655-fd188000-884e-11eb-80ce-e4704c17f81c.gif)
+
+  **일반 고객 회원가입 페이지**
+   
+  * 구현 기능 설명
+    - 아이디 : 7자 이상 16자 이하 입력
+    - 비밀번호 : 10자 이상 16자리 이하 입력
+    - 이메일 : 중복 확인 
+    - 주소 : 카카오 주소 API를 이용한 주소 검색 
+    - 핸드폰 : 핸드폰 인증 번호 API를 이용한 인증번호 전송 
+    - 생년월일 : 만 14세 이상만 가입 가능
+
+
+------------
+
+2. <h3>개인정보 수정</h3>
