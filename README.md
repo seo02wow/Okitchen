@@ -97,7 +97,8 @@
 
 4. <h3>상품 검색</h3>
 
-![회원정보수정](https://github.com/seo02wow/Okitchen/assets/135966211/406ba0a5-eb6a-42e6-881f-f0afb128de7e)
+![상품검색](https://github.com/seo02wow/Okitchen/assets/135966211/69db9faa-d355-4ffd-8f42-c92206c2a977)
+
   
 
 **상품 검색 페이지**
@@ -110,7 +111,7 @@
 
 5. <h3>상품 찜하기</h3>
 
-![회원정보수정](https://github.com/seo02wow/Okitchen/assets/135966211/406ba0a5-eb6a-42e6-881f-f0afb128de7e)
+
   
 
 **상품 찜하기 페이지**
