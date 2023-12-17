@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="registerProdDAO">
+	<!-- 상품테이블에 추가하기 -->
+	<insert id="insertProduct" parameterType="registerProd">
+		INSERT INTO PRODUCT (
+			PRODUCT_ID, SELLER_ID, BRAND, TITLE, IMAGE
+			, PRICE, DISCOUNT_RATE, CONTENT, APPROVAL_STATUS
+			, PRODUCT_STATUS, SUBMIT_DATE, OPTION_CHECK, ORIGIN, MANUFACTURING_DATE
+			, EXPIRATION_DATE, CAUTION, NOTIFICATION, CATEGORY_NAME, STOCK
+			, DISCOUNTED_PRICE)
+		VALUES (
+			(SELECT NVL(MAX(PRODUCT_ID), 0) + 1 FROM PRODUCT)
+			, #{sellerId}, #{brand}, #{title}, #{image}
+			, #{price}, #{discountRate}, #{content}, '승인대기'
+			, '비전시', SYSDATE, #{optionCheck}, #{origin}, #{manufacturingDate}
+			, #{expirationDate}, #{caution}, #{notification}, #{categoryName}, #{stock}
+			, #{discountedPrice})
+	<selectKey keyProperty="productId" resultType="int" order="AFTER">
+		SELECT MAX(PRODUCT_ID) FROM PRODUCT ORDER BY PRODUCT_ID DESC
+	</selectKey>
+	</insert>
+	
+	<!-- 상품사진테이블에 추가하기 -->
+	<insert id="insertProdImage" parameterType="registerProd">
+		INSERT INTO PRODUCT_IMAGE (
+		    IMAGE_ID, PRODUCT_ID, PRODUCT_PHOTO)
+		VALUES (
+		    PRODUCT_IMAGE_SEQ.NEXTVAL, #{productId}, #{productPhoto})
+	</insert>
+	
+	<!-- 판매자의 내 상품목록 조회하기 -->
+	<select id="selectListSelProd" parameterType="Object" resultType="registerProd">
+	SELECT 
+	    P.*,
+	    PIP.PRODUCT_ID
+	FROM 
+	    PRODUCT P
+	JOIN 
+	    (SELECT PI.PRODUCT_ID
+	     FROM PRODUCT_IMAGE PI
+	     JOIN PRODUCT P ON P.PRODUCT_ID = PI.PRODUCT_ID
+	     GROUP BY PI.PRODUCT_ID) PIP ON P.PRODUCT_ID = PIP.PRODUCT_ID
+	WHERE 
+	    P.SELLER_ID = #{sellerId}
+	ORDER BY P.PRODUCT_ID DESC
+	</select>
+	
+	<!-- 판매자의 내 상품 상세보기 (대표이미지만 가져오기) -->
+	<select id="selectOneProd" parameterType="int" resultType="registerProd">
+	SELECT *
+	FROM PRODUCT
+	WHERE PRODUCT_ID = #{productId}
+	</select>
+	
+	<!-- 상세이미지 가져오기 -->
+	<select id="selectDetailImages" parameterType="int" resultType="productImage">
+	    SELECT *
+	    FROM PRODUCT_IMAGE
+	    WHERE PRODUCT_ID = #{productId}
+	</select> 
+	
+	<!-- 상품 수정 -->
+	<update id="sellerUpdateProduct" parameterType="registerProd">
+		UPDATE PRODUCT
+		SET IMAGE = #{image},
+		    PRICE = #{price},
+		    DISCOUNT_RATE = #{discountRate},
+		    CONTENT = #{content},
+		    OPTION_CHECK = #{optionCheck},
+		    ORIGIN = #{origin},
+		    MANUFACTURING_DATE = #{manufacturingDate},
+		    EXPIRATION_DATE = #{expirationDate},
+		    CAUTION = #{caution},
+		    NOTIFICATION = #{notification},
+		    STOCK = #{stock},
+		    DISCOUNTED_PRICE = #{discountedPrice}
+		WHERE PRODUCT_ID = #{productId}
+	</update>
+	
+	<!-- 상품 수정 - 상세이미지 -->
+	<update id="sellerUpdateProductImage" parameterType="registerProd">
+		UPDATE PRODUCT_IMAGE
+		SET PRODUCT_PHOTO = #{productPhoto}
+		WHERE IMAGE_ID = #{imageId}
+	</update>
+	
+	<!-- 상품 상세 이미지 삭제 -->
+	<delete id="deleteProductImage" parameterType="int">
+		DELETE 
+		FROM PRODUCT_IMAGE
+		WHERE IMAGE_ID = #{imageId}
+	</delete>
+	
+	<!-- 상품 수정 - 상태 -->
+	<update id="productStatusUpdate" parameterType="registerProd">
+		UPDATE PRODUCT
+		SET PRODUCT_STATUS = #{productStatus}
+		WHERE PRODUCT_ID = #{productId}
+	</update>
+</mapper>

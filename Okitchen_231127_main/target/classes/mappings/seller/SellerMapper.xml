@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sellerDAO">
+	<!-- 수진 -->
+	<select id="getSeller" parameterType="seller"
+	 resultType="seller">
+		SELECT * 
+		FROM SELLER
+		WHERE SELLER_ID = #{sellerId}
+	</select>
+	
+	<select id="findPwSeller" parameterType="seller"
+	 resultType="seller">
+		SELECT * 
+		FROM SELLER
+		WHERE SELLER_ID = #{sellerId}
+		AND COMPANY_NAME = #{companyName}
+		AND CUSTOMER_EMAIL = #{customerEmail}
+		AND REGISTRATION_NUM = #{registrationNum}
+	</select>
+	
+	<select id="findIdSeller" parameterType="seller"
+	 resultType="seller">
+		SELECT * 
+		FROM SELLER
+		WHERE COMPANY_NAME = #{companyName}
+		AND CUSTOMER_EMAIL = #{customerEmail}
+		AND REGISTRATION_NUM = #{registrationNum}
+	</select>
+	
+	<select id="sellerIdCheck" parameterType="seller"
+	 resultType="int">
+	 	SELECT COUNT(*) 
+		FROM SELLER
+		WHERE SELLER_ID = #{sellerId}
+	</select>
+	
+	<insert id="insertSeller" parameterType="seller">
+		INSERT INTO SELLER (SELLER_ID, COMPANY_NAME, REPRESENTATIVE, CUSTOMER_CENTER, CUSTOMER_EMAIL, 
+							REGISTRATION_NUM, SELLER_PASSWORD, SELLER_TYPE, SELLER_CHANGE_DATE, SELLER_STATUS)
+		VALUES (#{sellerId}, #{companyName}, #{representative}, #{customerCenter}, #{customerEmail},
+				#{registrationNum}, #{sellerPassword}, #{sellerType}, SYSDATE, #{sellerStatus})
+	</insert>
+	
+	<update id="updatePwSeller" parameterType="seller">
+		UPDATE SELLER
+		SET SELLER_PASSWORD = #{sellerPassword}
+		WHERE SELLER_ID = #{sellerId}
+	</update>
+	
+	<update id="updateSeller" parameterType="seller">
+		UPDATE SELLER
+		SET SELLER_PASSWORD = #{sellerPassword}, 
+			CUSTOMER_EMAIL = #{customerEmail},
+			CUSTOMER_CENTER = #{customerCenter}
+		WHERE SELLER_ID = #{sellerId}
+	</update>
+	
+	<update id="updateSellerStatus" parameterType="seller">
+		UPDATE SELLER
+		SET SELLER_STATUS = #{sellerStatus},
+			SELLER_CHANGE_DATE = SYSDATE
+		WHERE SELLER_ID = #{sellerId}
+		AND SELLER_PASSWORD = #{sellerPassword}
+	</update>
+	
+	<select id="getSellerList" parameterType="Map" resultType="seller">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, SELL.*
+		        FROM (SELECT  *
+		                FROM SELLER
+		                ORDER BY SELLER_REGDATE DESC) SELL)
+		WHERE RNUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<select id="getSellerCount" resultType="int">
+		SELECT COUNT(*)
+		FROM SELLER
+	</select>
+	
+	<!-- 판매자 정보 가져오기 (cho)-->
+	<select id="selectOneSel" parameterType="registerProd" resultType="seller">
+		SELECT * 
+		FROM SELLER
+		WHERE SELLER_ID = #{sellerId}
+	</select>
+	
+	<!-- 사업자 회원가입 사업자등록번호 조회 -->
+	<select id="sellerFindregistNum" parameterType="seller" resultType="int">
+		SELECT COUNT(*)
+		FROM SELLER
+		WHERE REGISTRATION_NUM = #{registrationNum}
+	</select>
+	
+	
+	<!-- 231128 의진 -->
+	<!-- 문의답변작성 시 문의 내용 조회 -->
+	<select id="getinquiryOne"  parameterType="inquiry" resultType="inquiry">
+		SELECT * 
+		FROM INQUIRY
+		WHERE INQ_ID = #{inqId}
+	</select>
+
+	
+	<!-- 문의답변 등록 -->
+	<insert id="inqAnsInsert" parameterType="inquiryAns">
+	    INSERT INTO INQUIRY_ANS (ANS_ID, ANS_CONTENT, ANS_DATE, INQ_ID) 
+		VALUES ((SELECT NVL(MAX(ANS_ID), 0) + 1 FROM INQUIRY_ANS), #{ansContent}, SYSDATE, #{inqId})
+	</insert>
+	
+	<!-- 문의답변여부 수정 -->
+	<update id="inqAnswered" parameterType="inquiryAns">
+	    UPDATE INQUIRY
+		SET INQ_ANSWERED = '답변완료'
+		WHERE INQ_ID = #{inqId}
+	</update>
+	
+	<!-- 문의답변 수정 -->
+	<update id="inqAnsUpdate" parameterType="inquiryAns">
+       	UPDATE INQUIRY_ANS
+		SET ANS_CONTENT = #{ansContent}
+		WHERE INQ_ID = #{inqId}
+	</update>
+	
+	<!-- 문의답변수정 시 답변내용 조회 -->
+	<select id="getinquiryAnsOne"  parameterType="inquiryAns" resultType="inquiryAns">
+		SELECT * 
+		FROM INQUIRY_ANS
+		WHERE INQ_ID = #{inqId}
+	</select>
+	
+	<!-- 문의답변 삭제 -->
+	<delete id="deleteInquiryAns" parameterType="inquiry">
+		DELETE INQUIRY_ANS
+		WHERE INQ_ID = #{inqId}
+	</delete>
+	
+	   <!-- 문의답변 삭제시 상태변경 -->
+   <delete id="inqAnsweredUpdate" parameterType="inquiry">
+       UPDATE INQUIRY
+      SET INQ_ANSWERED = '답변대기'
+      WHERE INQ_ID = #{inqId}
+   </delete>
+	
+</mapper>
