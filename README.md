@@ -176,5 +176,5 @@
 <p align="center">
 읽어주셔서 감사합니다:)<br><br>
 추가적인 포트폴리오가 궁금하시다면 <br>
-[포트폴리오 링크](https://github.com/seo02wow)https://github.com/seo02wow) 을 클릭해주세요.
+[포트폴리오 링크](https://github.com/seo02wow?tab=repositories) 을 클릭해주세요.
 </p>
